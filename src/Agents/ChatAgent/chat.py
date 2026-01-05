@@ -63,7 +63,6 @@ def _detect_booking_confirmation(user_text: str) -> tuple[bool, dict]:
     patient_info = {}
     
     # Try to extract email
-    import re
     email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     emails = re.findall(email_pattern, user_text)
     if emails:
@@ -182,7 +181,6 @@ def chatflow(user_text, session_id="default", context=None, patient_info=None):
             
             # Also try to extract info from any text (not just confirmation messages)
             # This handles cases like "my email is john@example.com" without "yes"
-            import re
             # Extract email if not already found
             if "contact" not in extracted_info:
                 email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
