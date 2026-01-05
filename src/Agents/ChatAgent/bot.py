@@ -14,7 +14,7 @@ load_dotenv()
 
 # API configuration
 # bot.py ONLY uses the inference endpoint - it does NOT load the model
-API_URL = os.getenv("API_URL", "http://localhost:8000/message")
+MODEL_API_URL = os.getenv("MODEL_API_URL", "http://localhost:8000/message")
 
 # Load tokenizer ONLY for building prompts (chat template formatting)
 # The actual model inference is done via API endpoint
@@ -78,7 +78,7 @@ def pipe(prompt):
     device_type = None
     try:
         import requests as req_check
-        device_check = req_check.get(API_URL.replace("/message", "/"), timeout=5)
+        device_check = req_check.get(MODEL_API_URL.replace("/message", "/"), timeout=5)
         if device_check.status_code == 200:
             device_info = device_check.json()
             device_str = device_info.get("device", "")
@@ -126,13 +126,13 @@ def pipe(prompt):
                 data["eos_token_id"] = stop_token_ids
         
         # Debug: Log request details
-        print(f"[bot.py] Making request to: {API_URL}")
+        print(f"[bot.py] Making request to: {MODEL_API_URL}")
         print(f"[bot.py] Prompt length: {len(prompt)}")
         print(f"[bot.py] Prompt preview: {prompt[:200]}...")
         print(f"[bot.py] Request timeout set to {timeout_seconds} seconds")
         print(f"[bot.py] Max new tokens: {default_max_tokens}")
         
-        response = requests.post(API_URL, json=data, headers=headers, timeout=timeout_seconds)
+        response = requests.post(MODEL_API_URL, json=data, headers=headers, timeout=timeout_seconds)
         
         # Check for errors before parsing JSON
         if response.status_code != 200:
